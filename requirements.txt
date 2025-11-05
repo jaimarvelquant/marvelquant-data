@@ -1,0 +1,5 @@
+# Core dependencies for marvelquant-data
+nautilus_trader>=1.200.0
+pandas>=2.0.0
+pyarrow>=14.0.0
+pytz>=2023.3

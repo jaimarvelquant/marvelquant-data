@@ -19,7 +19,7 @@ A standalone Python library for managing and transforming NSE (National Stock Ex
 ### From Source
 
 ```bash
-git clone https://github.com/marvelquant/marvelquant-data.git
+git clone https://github.com/jaimarvelquant/marvelquant-data.git
 cd marvelquant-data
 pip install -e .
 ```
@@ -197,7 +197,7 @@ marvelquant-data/
 
 ```bash
 # Clone the repository
-git clone https://github.com/marvelquant/marvelquant-data.git
+git clone https://github.com/jaimarvelquant/marvelquant-data.git
 cd marvelquant-data
 
 # Create virtual environment
@@ -243,8 +243,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 For issues, questions, or contributions, please visit:
-- **Issues**: https://github.com/marvelquant/marvelquant-data/issues
-- **Discussions**: https://github.com/marvelquant/marvelquant-data/discussions
+- **Issues**: https://github.com/jaimarvelquant/marvelquant-data/issues
+- **Discussions**: https://github.com/jaimarvelquant/marvelquant-data/discussions
 
 ## Roadmap
 

@@ -43,10 +43,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/marvelquant/marvelquant-data"
-Documentation = "https://github.com/marvelquant/marvelquant-data#readme"
-Repository = "https://github.com/marvelquant/marvelquant-data"
-Issues = "https://github.com/marvelquant/marvelquant-data/issues"
+Homepage = "https://github.com/jaimarvelquant/marvelquant-data"
+Documentation = "https://github.com/jaimarvelquant/marvelquant-data#readme"
+Repository = "https://github.com/jaimarvelquant/marvelquant-data"
+Issues = "https://github.com/jaimarvelquant/marvelquant-data/issues"
 
 [project.scripts]
 transform-nse-data = "marvelquant_data.scripts.transform:main"

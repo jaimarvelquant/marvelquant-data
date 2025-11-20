@@ -6,12 +6,16 @@ Provides:
 - NSE calendar (holiday and trading day calculations)
 - Expiry calculator (monthly/weekly expiry dates, bucket classification)
 - Timestamp conversion (IST to UTC nanoseconds)
+- Greeks calculator (Black-Scholes option pricing and Greeks)
+- Interest rate provider (Risk-free rates for Greeks calculations)
 
 Usage:
     >>> from marvelquant_data.utils import create_options_contract
     >>> from marvelquant_data.utils import NSEHolidayCalendar
     >>> from marvelquant_data.utils import get_nse_monthly_expiry
     >>> from marvelquant_data.utils import yyyymmdd_seconds_to_utc_ns
+    >>> from marvelquant_data.utils import OptionPricing
+    >>> from marvelquant_data.utils import InterestRateProvider
 """
 
 from .contract_generators import (
@@ -42,6 +46,9 @@ from .timestamp_conversion import (
     IST_OFFSET,
 )
 
+from .greeks import OptionPricing
+from .rates import InterestRateProvider
+
 __all__ = [
     # Contract generators
     "create_options_contract",
@@ -65,4 +72,7 @@ __all__ = [
     "utc_ns_to_datetime_str",
     "analyze_timestamp_field",
     "IST_OFFSET",
+    # Greeks and rates
+    "OptionPricing",
+    "InterestRateProvider",
 ]

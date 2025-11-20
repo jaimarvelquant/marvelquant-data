@@ -27,12 +27,12 @@ from typing import Set
 class NSEHolidayCalendar:
     """
     NSE trading holiday calendar for India market.
-
+    
     Attributes:
         HOLIDAYS: Set of all NSE holidays from 2018-2024
         WEEKEND_DAYS: Set of weekend day numbers (Saturday=5, Sunday=6)
     """
-
+    
     # NSE Holidays 2018
     HOLIDAYS_2018 = {
         date(2018, 1, 26),   # Republic Day
@@ -50,7 +50,7 @@ class NSEHolidayCalendar:
         date(2018, 11, 23),  # Guru Nanak Jayanti
         date(2018, 12, 25),  # Christmas
     }
-
+    
     # NSE Holidays 2019
     HOLIDAYS_2019 = {
         date(2019, 1, 26),   # Republic Day (Saturday)
@@ -70,7 +70,7 @@ class NSEHolidayCalendar:
         date(2019, 11, 12),  # Guru Nanak Jayanti
         date(2019, 12, 25),  # Christmas
     }
-
+    
     # NSE Holidays 2020
     HOLIDAYS_2020 = {
         date(2020, 1, 26),   # Republic Day (Sunday)
@@ -90,7 +90,7 @@ class NSEHolidayCalendar:
         date(2020, 11, 30),  # Guru Nanak Jayanti
         date(2020, 12, 25),  # Christmas
     }
-
+    
     # NSE Holidays 2021
     HOLIDAYS_2021 = {
         date(2021, 1, 26),   # Republic Day
@@ -107,7 +107,7 @@ class NSEHolidayCalendar:
         date(2021, 11, 5),   # Diwali Balipratipada
         date(2021, 11, 19),  # Guru Nanak Jayanti
     }
-
+    
     # NSE Holidays 2022
     HOLIDAYS_2022 = {
         date(2022, 1, 26),   # Republic Day
@@ -125,7 +125,7 @@ class NSEHolidayCalendar:
         date(2022, 10, 26),  # Diwali Balipratipada
         date(2022, 11, 8),   # Guru Nanak Jayanti
     }
-
+    
     # NSE Holidays 2023
     HOLIDAYS_2023 = {
         date(2023, 1, 26),   # Republic Day
@@ -146,7 +146,7 @@ class NSEHolidayCalendar:
         date(2023, 11, 27),  # Guru Nanak Jayanti
         date(2023, 12, 25),  # Christmas
     }
-
+    
     # NSE Holidays 2024
     HOLIDAYS_2024 = {
         date(2024, 1, 26),   # Republic Day
@@ -164,30 +164,30 @@ class NSEHolidayCalendar:
         date(2024, 11, 15),  # Guru Nanak Jayanti
         date(2024, 12, 25),  # Christmas
     }
-
+    
     # Combined set of all holidays
     HOLIDAYS = (
-        HOLIDAYS_2018 | HOLIDAYS_2019 | HOLIDAYS_2020 |
+        HOLIDAYS_2018 | HOLIDAYS_2019 | HOLIDAYS_2020 | 
         HOLIDAYS_2021 | HOLIDAYS_2022 | HOLIDAYS_2023 | HOLIDAYS_2024
     )
-
+    
     # Weekend days (Saturday=5, Sunday=6)
     WEEKEND_DAYS = {5, 6}
-
+    
     def is_trading_day(self, dt: date) -> bool:
         """
         Check if a given date is a trading day.
-
+        
         A trading day is:
         - Not a weekend (Saturday/Sunday)
         - Not a declared NSE holiday
-
+        
         Args:
             dt: Date to check
-
+        
         Returns:
             True if trading day, False otherwise
-
+        
         Example:
             >>> calendar = NSEHolidayCalendar()
             >>> calendar.is_trading_day(date(2024, 1, 26))  # Republic Day
@@ -199,21 +199,21 @@ class NSEHolidayCalendar:
             dt.weekday() not in self.WEEKEND_DAYS
             and dt not in self.HOLIDAYS
         )
-
+    
     def trading_days_between(self, start: date, end: date) -> int:
         """
         Count trading days between start (inclusive) and end (exclusive).
-
+        
         Used for accurate DTE (Days-To-Expiry) calculations that exclude
         weekends and holidays (options don't decay on non-trading days).
-
+        
         Args:
             start: Start date (inclusive)
             end: End date (exclusive)
-
+        
         Returns:
             Number of trading days
-
+        
         Example:
             >>> calendar = NSEHolidayCalendar()
             >>> # Jan 15 (Mon) to Jan 25 (Thu) 2024
@@ -227,20 +227,20 @@ class NSEHolidayCalendar:
                 count += 1
             current += timedelta(days=1)
         return count
-
+    
     def get_previous_trading_day(self, dt: date) -> date:
         """
         Get the previous trading day before a given date.
-
+        
         Used for holiday adjustment of expiry dates (if expiry falls on
         holiday, move to previous trading day).
-
+        
         Args:
             dt: Reference date
-
+        
         Returns:
             Previous trading day
-
+        
         Example:
             >>> calendar = NSEHolidayCalendar()
             >>> # Republic Day 2024 (Friday, Jan 26)
@@ -251,17 +251,17 @@ class NSEHolidayCalendar:
         while not self.is_trading_day(current):
             current -= timedelta(days=1)
         return current
-
+    
     def get_next_trading_day(self, dt: date) -> date:
         """
         Get the next trading day after a given date.
-
+        
         Args:
             dt: Reference date
-
+        
         Returns:
             Next trading day
-
+        
         Example:
             >>> calendar = NSEHolidayCalendar()
             >>> # Friday Jan 26, 2024 (Republic Day)
@@ -272,18 +272,18 @@ class NSEHolidayCalendar:
         while not self.is_trading_day(current):
             current += timedelta(days=1)
         return current
-
+    
     def get_trading_days_in_month(self, year: int, month: int) -> list[date]:
         """
         Get all trading days in a given month.
-
+        
         Args:
             year: Year (e.g., 2024)
             month: Month (1-12)
-
+        
         Returns:
             List of trading days in the month
-
+        
         Example:
             >>> calendar = NSEHolidayCalendar()
             >>> trading_days = calendar.get_trading_days_in_month(2024, 1)
@@ -291,13 +291,13 @@ class NSEHolidayCalendar:
             22  # Typical month has ~22 trading days
         """
         import calendar as cal
-
+        
         trading_days = []
         last_day = cal.monthrange(year, month)[1]
-
+        
         for day in range(1, last_day + 1):
             dt = date(year, month, day)
             if self.is_trading_day(dt):
                 trading_days.append(dt)
-
+        
         return trading_days

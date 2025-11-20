@@ -30,18 +30,18 @@ from .nse_calendar import NSEHolidayCalendar
 def get_nse_monthly_expiry(year: int, month: int, calendar: NSEHolidayCalendar) -> date:
     """
     Calculate NSE monthly expiry (last Thursday of month, adjusted for holidays).
-
+    
     NSE Rule: Last Thursday of month. If Thursday is holiday, move to
     previous trading day.
-
+    
     Args:
         year: Year (e.g., 2024)
         month: Month (1-12)
         calendar: NSEHolidayCalendar instance
-
+    
     Returns:
         Expiry date (last trading Thursday)
-
+    
     Example:
         >>> calendar = NSEHolidayCalendar()
         >>> get_nse_monthly_expiry(2024, 1, calendar)
@@ -52,33 +52,33 @@ def get_nse_monthly_expiry(year: int, month: int, calendar: NSEHolidayCalendar) 
     # Get last day of month
     last_day_num = cal.monthrange(year, month)[1]
     last_day = date(year, month, last_day_num)
-
+    
     # Find last Thursday (weekday 3 = Thursday, 0=Monday, 6=Sunday)
     # days_since_thursday tells us how many days back from last_day to Thursday
     days_since_thursday = (last_day.weekday() - 3) % 7
     last_thursday = last_day - timedelta(days=days_since_thursday)
-
+    
     # Adjust for holidays (move backwards to previous trading day)
     while not calendar.is_trading_day(last_thursday):
         last_thursday -= timedelta(days=1)
-
+    
     return last_thursday
 
 
 def get_nse_weekly_expiries(year: int, month: int, calendar: NSEHolidayCalendar) -> List[date]:
     """
     Get all NSE weekly expiries (Thursdays) in a given month.
-
+    
     NSE Rule: Weekly options expire every Thursday.
-
+    
     Args:
         year: Year (e.g., 2024)
         month: Month (1-12)
         calendar: NSEHolidayCalendar instance
-
+    
     Returns:
         List of weekly expiry dates (all Thursdays in month, holiday-adjusted)
-
+    
     Example:
         >>> calendar = NSEHolidayCalendar()
         >>> weekly_expiries = get_nse_weekly_expiries(2024, 1, calendar)
@@ -89,7 +89,7 @@ def get_nse_weekly_expiries(year: int, month: int, calendar: NSEHolidayCalendar)
     last_day_num = cal.monthrange(year, month)[1]
     first_day = date(year, month, 1)
     last_day = date(year, month, last_day_num)
-
+    
     current = first_day
     while current <= last_day:
         # Thursday = weekday 3
@@ -100,7 +100,7 @@ def get_nse_weekly_expiries(year: int, month: int, calendar: NSEHolidayCalendar)
                 expiry -= timedelta(days=1)
             expiries.append(expiry)
         current += timedelta(days=1)
-
+    
     return expiries
 
 
@@ -111,21 +111,21 @@ def classify_expiry_bucket(
 ) -> str:
     """
     Classify option into expiry bucket based on trading DTE.
-
+    
     Buckets (based on trading days, not calendar days):
     - CW: Current Week (≤7 trading days) - 0DTE strategies, weekly spreads
     - NW: Next Week (8-14 trading days) - short-term credit spreads
     - CM: Current Month (15-30 trading days) - monthly iron condors
     - NM: Next Month (31+ trading days) - LEAPS, diagonal spreads
-
+    
     Args:
         option_expiry: Option expiry date
         current_date: Current date for DTE calculation
         calendar: NSEHolidayCalendar instance
-
+    
     Returns:
         Expiry bucket code: "CW" | "NW" | "CM" | "NM"
-
+    
     Example:
         >>> calendar = NSEHolidayCalendar()
         >>> # 7 trading days to expiry
@@ -145,7 +145,7 @@ def classify_expiry_bucket(
     """
     # Calculate DTE using trading days (excludes weekends and holidays)
     dte = calendar.trading_days_between(current_date, option_expiry)
-
+    
     if dte <= 7:
         return "CW"
     elif dte <= 14:
@@ -159,13 +159,13 @@ def classify_expiry_bucket(
 def get_expiry_bucket_description(bucket: str) -> str:
     """
     Get human-readable description of expiry bucket.
-
+    
     Args:
         bucket: Bucket code ("CW", "NW", "CM", "NM")
-
+    
     Returns:
         Description string
-
+    
     Example:
         >>> get_expiry_bucket_description("CW")
         'Current Week (≤7 DTE) - 0DTE strategies, weekly spreads'
@@ -182,14 +182,14 @@ def get_expiry_bucket_description(bucket: str) -> str:
 def get_all_monthly_expiries(year: int, calendar: NSEHolidayCalendar) -> dict[int, date]:
     """
     Get all monthly expiries for a given year.
-
+    
     Args:
         year: Year (e.g., 2024)
         calendar: NSEHolidayCalendar instance
-
+    
     Returns:
         Dictionary mapping month (1-12) to expiry date
-
+    
     Example:
         >>> calendar = NSEHolidayCalendar()
         >>> expiries = get_all_monthly_expiries(2024, calendar)
@@ -207,14 +207,14 @@ def get_all_monthly_expiries(year: int, calendar: NSEHolidayCalendar) -> dict[in
 def is_expiry_day(dt: date, calendar: NSEHolidayCalendar) -> bool:
     """
     Check if a given date is a monthly expiry day.
-
+    
     Args:
         dt: Date to check
         calendar: NSEHolidayCalendar instance
-
+    
     Returns:
         True if date is monthly expiry, False otherwise
-
+    
     Example:
         >>> calendar = NSEHolidayCalendar()
         >>> is_expiry_day(date(2024, 1, 25), calendar)  # Last Thursday Jan
